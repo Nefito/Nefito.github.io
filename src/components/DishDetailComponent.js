@@ -149,15 +149,15 @@ function RenderDish({ dish }) {
                             <li key={comment.id}>
                                 <p>{comment.comment}</p>
                                 <p>
-                                    --{comment.author}, {new Intl.DateTimeFormat('en-US',
-                                    { year: 'numeric', month: 'short', day: '2-digit'})
+                                    by <b>{comment.author}</b>,
+                                    {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'})
                                     .format(new Date(Date.parse(comment.date)))}
                                 </p>
                             </li>
                         </Fade>
-                    )
-                })
-            <Stagger>
+                        );
+                })}
+            </Stagger>
         </ul>
         <CommentForm dishId={dishId} postComment={postComment} />
       </div>
