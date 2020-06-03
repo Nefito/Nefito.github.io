@@ -1,0 +1,16 @@
+
+.test-button{
+    display: block;
+    margin: 20rem 43rem;
+    background-color: violet;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+}
+
+.test-button:hover,
+.test-button:active {
+    cursor: pointer;
+    color: violet;
+    background-color: white;
+}
