@@ -1,0 +1,13 @@
+.container {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+}
+
+.bookList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px
+}

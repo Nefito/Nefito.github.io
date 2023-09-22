@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  width: 200px;
+  border: 1px solid #aaaaaa;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.container:hover {
+  border-color: black;
+}
+
+.container:hover .title {
+  text-decoration: underline;
+}
+
+.cover {
+  object-fit: contain;
+  width: 200px;
+  height: 260px;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  padding: 8px;
+  font-size: 12px;
+}
