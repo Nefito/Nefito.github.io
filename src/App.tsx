@@ -1,7 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { HomePage, ErrorPage } from "./containers";
+import { HomePage, ErrorPage, BookDetailsPage } from "./containers";
 
 import styles from "./app.module.css";
 
@@ -15,6 +15,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <HomePage />,
     errorElement: <ErrorPage />,
+  },
+  {
+    path: "book/:bookId",
+    element: <BookDetailsPage />,
   },
 ]);
 

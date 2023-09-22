@@ -1,0 +1,24 @@
+.container {
+  padding: 40px;
+}
+
+.bookDetailsContainer {
+  padding-top: 18px;
+  display: flex;
+  column-gap: 24px;
+}
+
+.coverContainer {
+  height: 750px;
+}
+
+.coverContainer img {
+  height: 100%;
+}
+
+.bookInfoContainer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  justify-content: center;
+}

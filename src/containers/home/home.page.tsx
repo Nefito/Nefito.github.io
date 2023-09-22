@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { TextField } from "@mui/material";
 
 import { BookElement } from "./book-element";
 import { BookElementType } from "./home.types";
 import { useDebounce } from "./home.utils";
+import { apiKey } from "../constants";
 
 import styles from "./home.page.module.css";
 
-const apiKey = "AIzaSyDx6R21I5s7GhVDwM-2ZxXVXZieSm8-p8c";
-
 export const HomePage = () => {
+  const navigate = useNavigate();
+
   const [books, setBooks] = useState<BookElementType[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -19,6 +21,10 @@ export const HomePage = () => {
   const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchValue(value);
+  };
+
+  const handleBookClick = (id: string) => {
+    navigate(`/book/${id}`);
   };
 
   const loadBooks = async (query = "a") => {
@@ -62,8 +68,10 @@ export const HomePage = () => {
             return (
               <BookElement
                 key={book.id}
+                id={book.id}
                 title={book.title}
                 coverURL={book.coverURL}
+                onClick={handleBookClick}
               />
             );
           })}
