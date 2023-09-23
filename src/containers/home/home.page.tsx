@@ -14,14 +14,15 @@ export const HomePage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [searchValue, setSearchValue] = useState("");
+  const { searchResults, status, totalItems, searchTerm } = useAppSelector(
+    (state) => state.book
+  );
+
+  const [searchValue, setSearchValue] = useState(searchTerm ?? "");
   const [booksAvailable, setBooksAvailable] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
 
   const debouncedValue = useDebounce(searchValue, 300);
-  const { searchResults, status, totalItems } = useAppSelector(
-    (state) => state.book
-  );
 
   const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -50,7 +51,7 @@ export const HomePage = () => {
 
   useEffect(() => {
     setBooksAvailable(!!searchResults.length);
-  }, [searchResults]);
+  }, [searchResults.length]);
 
   return (
     <div className={styles.container}>

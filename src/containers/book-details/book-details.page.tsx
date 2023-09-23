@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 
+import { BookComponent } from "./book-component";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchBook } from "../../redux";
 
@@ -37,26 +38,7 @@ export const BookDetailsPage = () => {
         <div>Failed to load book details</div>
       )}
       {status === "succeeded" && !!singleBookData && (
-        <div className={styles.bookDetailsContainer}>
-          <div className={styles.coverContainer}>
-            <img src={singleBookData.coverURL} alt={singleBookData.title} />
-          </div>
-          <div className={styles.bookInfoContainer}>
-            <div>Author(s): {singleBookData.authors?.join(", ")}</div>
-            <div>
-              Title: <strong>{singleBookData.title}</strong>
-            </div>
-            <div>
-              Publish date:{" "}
-              {singleBookData.publishDate
-                ? new Date(singleBookData.publishDate).toDateString()
-                : "No date available"}
-            </div>
-            {singleBookData.description && (
-              <div>Description: {singleBookData.description}</div>
-            )}
-          </div>
-        </div>
+        <BookComponent {...singleBookData} />
       )}
     </div>
   );

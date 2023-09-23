@@ -1,11 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
 
+import { saveToLocalStorage, loadFromLocalStorage } from "./bookSlice";
+
 import bookReducer from "./bookSlice";
+
+const persistedState = loadFromLocalStorage();
 
 const store = configureStore({
   reducer: {
     book: bookReducer,
   },
+  preloadedState: persistedState,
+});
+
+store.subscribe(() => {
+  saveToLocalStorage(store.getState());
 });
 
 export type AppDispatch = typeof store.dispatch;
