@@ -1,51 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 
-import { BookDetailsType } from "./book-details.types";
-import { apiKey } from "../constants";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { fetchBook } from "../../redux";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import styles from "./book-details.page.module.css";
 
 export const BookDetailsPage = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const bookId = pathname.split("/")[2];
 
-  const [bookData, setBookData] = useState<BookDetailsType>(
-    {} as BookDetailsType
-  );
-  const [loading, setLoading] = useState(false);
+  const { singleBookData, status } = useAppSelector((state) => state.book);
 
   const handleBackClick = () => navigate(-1);
 
-  const loadBook = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(
-        `https://www.googleapis.com/books/v1/volumes/${bookId}?key=${apiKey}`
-      );
-      const data = await res.json();
-      const parsedData: BookDetailsType = {
-        title: data.volumeInfo.title,
-        description: data.volumeInfo.description,
-        coverURL: data.volumeInfo?.imageLinks.medium,
-        publishDate: data.volumeInfo.publishedDate,
-        authors: data.volumeInfo.authors,
-      };
-
-      setBookData(parsedData);
-    } catch (e) {
-      console.error("Error:", e);
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
-    loadBook();
-  }, []);
+    dispatch(fetchBook(bookId));
+  }, [dispatch]);
 
   return (
     <div className={styles.container}>
@@ -56,26 +32,28 @@ export const BookDetailsPage = () => {
       >
         Back
       </Button>
-      {loading ? (
-        <div>Loading...</div>
-      ) : (
+      {status === "loading" && !singleBookData && <div>Loading...</div>}
+      {status === "failed" && !singleBookData && (
+        <div>Failed to load book details</div>
+      )}
+      {status === "succeeded" && !!singleBookData && (
         <div className={styles.bookDetailsContainer}>
           <div className={styles.coverContainer}>
-            <img src={bookData.coverURL} alt={bookData.title} />
+            <img src={singleBookData.coverURL} alt={singleBookData.title} />
           </div>
           <div className={styles.bookInfoContainer}>
-            <div>Author(s): {bookData.authors?.join(", ")}</div>
+            <div>Author(s): {singleBookData.authors?.join(", ")}</div>
             <div>
-              Title: <strong>{bookData.title}</strong>
+              Title: <strong>{singleBookData.title}</strong>
             </div>
             <div>
               Publish date:{" "}
-              {bookData.publishDate
-                ? new Date(bookData.publishDate).toDateString()
+              {singleBookData.publishDate
+                ? new Date(singleBookData.publishDate).toDateString()
                 : "No date available"}
             </div>
-            {bookData.description && (
-              <div>Description: {bookData.description}</div>
+            {singleBookData.description && (
+              <div>Description: {singleBookData.description}</div>
             )}
           </div>
         </div>

@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField } from "@mui/material";
+import { TextField, Pagination } from "@mui/material";
 
 import { BookElement } from "./book-element";
-import { BookElementType } from "./home.types";
 import { useDebounce } from "./home.utils";
-import { apiKey } from "../constants";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { searchBooks, setSearchTerm } from "../../redux";
 
 import styles from "./home.page.module.css";
+import { itemsPerPage } from "../constants";
 
 export const HomePage = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [books, setBooks] = useState<BookElementType[]>([]);
-  const [loading, setLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [booksAvailable, setBooksAvailable] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const debouncedValue = useDebounce(searchValue, 300);
+  const { searchResults, status, totalItems } = useAppSelector(
+    (state) => state.book
+  );
 
   const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -27,30 +32,25 @@ export const HomePage = () => {
     navigate(`/book/${id}`);
   };
 
-  const loadBooks = async (query = "a") => {
-    setLoading(true);
-    try {
-      const res = await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=40&key=${apiKey}`
-      );
-      const data = await res.json();
-      const parsedData: BookElementType[] = data.items.map((book: any) => {
-        return {
-          id: book.id,
-          title: book.volumeInfo.title,
-          coverURL: book.volumeInfo.imageLinks?.smallThumbnail,
-        };
-      });
-      setBooks(parsedData);
-    } catch (e) {
-      console.error("Error:", e);
-    }
-    setLoading(false);
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
   };
 
   useEffect(() => {
-    loadBooks(searchValue ? searchValue : "a");
-  }, [debouncedValue]);
+    dispatch(setSearchTerm(searchValue));
+
+    const startingIndex = (currentPage - 1) * itemsPerPage;
+    dispatch(
+      searchBooks({
+        searchString: searchValue ? searchValue : "a",
+        index: startingIndex.toString(),
+      })
+    );
+  }, [debouncedValue, currentPage]);
+
+  useEffect(() => {
+    setBooksAvailable(!!searchResults.length);
+  }, [searchResults]);
 
   return (
     <div className={styles.container}>
@@ -60,11 +60,12 @@ export const HomePage = () => {
         value={searchValue}
         onChange={handleSearchChange}
       />
-      {loading ? (
-        <div>Loading...</div>
-      ) : (
+      {status === "loading" && <div>Loading...</div>}
+      {status === "succeeded" && !booksAvailable && <div>No books found</div>}
+      {status === "failed" && <div>There was an error loading books</div>}
+      {status === "succeeded" && booksAvailable && (
         <div className={styles.bookList}>
-          {books.map((book) => {
+          {searchResults.map((book) => {
             return (
               <BookElement
                 key={book.id}
@@ -76,6 +77,17 @@ export const HomePage = () => {
             );
           })}
         </div>
+      )}
+      {totalItems > itemsPerPage + 1 && (
+        <Pagination
+          className={styles.pagination}
+          shape="rounded"
+          page={currentPage}
+          //Note: count should be Math.ceil(totalItems / itemsPerPage), but api keeps returning
+          //increasing totalItems with each pagination step and then stops at 20
+          count={19}
+          onChange={handlePageChange}
+        />
       )}
     </div>
   );

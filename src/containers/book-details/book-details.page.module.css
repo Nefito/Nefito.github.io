@@ -9,11 +9,15 @@
 }
 
 .coverContainer {
-  height: 750px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .coverContainer img {
-  height: 100%;
+  width: 500px;
+  height: 750px;
+  object-fit: contain;
 }
 
 .bookInfoContainer {
@@ -21,4 +25,22 @@
   flex-direction: column;
   row-gap: 8px;
   justify-content: center;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .bookDetailsContainer {
+    flex-direction: column;
+    row-gap: 18px;
+  }
+
+  .coverContainer,
+  .coverContainer img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .bookInfoContainer {
+    text-align: center;
+  }
 }
