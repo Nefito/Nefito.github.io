@@ -2,6 +2,7 @@
   "name": "sonra-technical-test",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://Nefito.github.io",
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -28,7 +29,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -50,12 +53,14 @@
   },
   "devDependencies": {
     "@babel/core": "^7.22.20",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-env": "^7.22.20",
     "@babel/preset-react": "^7.22.15",
     "@babel/preset-typescript": "^7.22.15",
     "@jest/globals": "^29.7.0",
     "@types/node": "^20.6.4",
     "babel-jest": "^29.7.0",
+    "gh-pages": "^6.0.0",
     "identity-obj-proxy": "^3.0.0",
     "ts-node": "^10.9.1",
     "tslib": "^2.6.2",
