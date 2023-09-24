@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 
-import { BookComponent } from "./book-component";
+import { BookComponent } from "../../components/book-component/book-component";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchBook } from "../../redux";
 

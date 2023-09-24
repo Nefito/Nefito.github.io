@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import { saveToLocalStorage, loadFromLocalStorage } from "./bookSlice";
+import { saveToLocalStorage, loadFromLocalStorage } from "../utils";
 
 import bookReducer from "./bookSlice";
 

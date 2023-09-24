@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, Pagination } from "@mui/material";
 
-import { BookElement } from "./book-element";
-import { useDebounce } from "./home.utils";
+import { useDebounce } from "../../hooks";
+import { itemsPerPage } from "../../constants";
+import { BookElement } from "../../components/book-element";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { searchBooks, setSearchTerm } from "../../redux";
 
 import styles from "./home.page.module.css";
-import { itemsPerPage } from "../constants";
 
 export const HomePage = () => {
   const dispatch = useAppDispatch();

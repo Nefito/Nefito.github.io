@@ -1,6 +1,6 @@
 import React from "react";
 
-import styles from "./book-details.page.module.css";
+import styles from "./book-component.module.css";
 
 type BookComponentProps = {
   title: string;
